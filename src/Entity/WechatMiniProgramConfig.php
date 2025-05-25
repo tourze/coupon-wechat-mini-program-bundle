@@ -2,12 +2,12 @@
 
 namespace Tourze\CouponWechatMiniProgramBundle\Entity;
 
-use CouponBundle\Entity\Coupon;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Tourze\Arrayable\ApiArrayInterface;
+use Tourze\CouponCoreBundle\Entity\Coupon;
 use Tourze\CouponWechatMiniProgramBundle\Repository\WechatMiniProgramConfigRepository;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
