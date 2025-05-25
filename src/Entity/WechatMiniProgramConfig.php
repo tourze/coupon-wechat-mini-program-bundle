@@ -43,7 +43,7 @@ class WechatMiniProgramConfig implements ApiArrayInterface
     private ?string $id = null;
 
     #[Ignore]
-    #[ORM\OneToOne(targetEntity: Coupon::class, inversedBy: 'wechatMiniProgramConfig', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Coupon::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Coupon $coupon = null;
 
