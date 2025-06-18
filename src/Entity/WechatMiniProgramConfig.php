@@ -15,24 +15,11 @@ use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 
-#[AsPermission(title: '微信小程序配置')]
-#[Deletable]
-#[Editable]
-#[Creatable]
 #[ORM\Entity(repositoryClass: WechatMiniProgramConfigRepository::class)]
 #[ORM\Table(name: 'coupon_wechat_mini_program_config', options: ['comment' => '微信小程序配置'])]
 class WechatMiniProgramConfig implements ApiArrayInterface
 {
-    #[ExportColumn]
-    #[ListColumn(order: -1, sorter: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
@@ -44,17 +31,14 @@ class WechatMiniProgramConfig implements ApiArrayInterface
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Coupon $coupon = null;
 
-    #[FormField(span: 16)]
     #[Groups(['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => 'AppID'])]
     private ?string $appId = '';
 
-    #[FormField(span: 8)]
     #[Groups(['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 20, nullable: true, options: ['comment' => '小程序版本'])]
     private ?string $envVersion = null;
 
-    #[FormField]
     #[Groups(['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 255, options: ['comment' => '跳转路径'])]
     private ?string $path = '';
