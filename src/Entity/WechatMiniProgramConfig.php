@@ -4,21 +4,20 @@ namespace Tourze\CouponWechatMiniProgramBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\CouponCoreBundle\Entity\Coupon;
 use Tourze\CouponWechatMiniProgramBundle\Repository\WechatMiniProgramConfigRepository;
-use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
-use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
+use Tourze\DoctrineIpBundle\Traits\IpTraceableAware;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
 #[ORM\Entity(repositoryClass: WechatMiniProgramConfigRepository::class)]
 #[ORM\Table(name: 'coupon_wechat_mini_program_config', options: ['comment' => '微信小程序配置'])]
-class WechatMiniProgramConfig implements ApiArrayInterface
+class WechatMiniProgramConfig implements ApiArrayInterface, Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -33,7 +32,7 @@ class WechatMiniProgramConfig implements ApiArrayInterface
 
     #[Groups(['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => 'AppID'])]
-    private ?string $appId = '';
+    private string $appId = '';
 
     #[Groups(['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 20, nullable: true, options: ['comment' => '小程序版本'])]
@@ -43,22 +42,8 @@ class WechatMiniProgramConfig implements ApiArrayInterface
     #[ORM\Column(type: Types::STRING, length: 255, options: ['comment' => '跳转路径'])]
     private ?string $path = '';
 
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
-
-    #[CreateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
-    private ?string $createdFromIp = null;
-
-    #[UpdateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
-    private ?string $updatedFromIp = null;
-
+    use BlameableAware;
+    use IpTraceableAware;
     use TimestampableAware;
 
     public function getId(): ?string
@@ -66,53 +51,6 @@ class WechatMiniProgramConfig implements ApiArrayInterface
         return $this->id;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
-
-    public function setCreatedFromIp(?string $createdFromIp): self
-    {
-        $this->createdFromIp = $createdFromIp;
-
-        return $this;
-    }
-
-    public function getCreatedFromIp(): ?string
-    {
-        return $this->createdFromIp;
-    }
-
-    public function setUpdatedFromIp(?string $updatedFromIp): self
-    {
-        $this->updatedFromIp = $updatedFromIp;
-
-        return $this;
-    }
-
-    public function getUpdatedFromIp(): ?string
-    {
-        return $this->updatedFromIp;
-    }
 
     public function getCoupon(): ?Coupon
     {
@@ -126,7 +64,7 @@ class WechatMiniProgramConfig implements ApiArrayInterface
         return $this;
     }
 
-    public function getAppId(): ?string
+    public function getAppId(): string
     {
         return $this->appId;
     }
@@ -172,5 +110,10 @@ class WechatMiniProgramConfig implements ApiArrayInterface
             'envVersion' => $this->getEnvVersion(),
             'path' => $this->getPath(),
         ];
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('微信小程序配置 [%s]', $this->appId ?: 'ID:' . $this->id);
     }
 }
