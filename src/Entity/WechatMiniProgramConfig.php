@@ -11,7 +11,7 @@ use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\CouponCoreBundle\Entity\Coupon;
 use Tourze\CouponWechatMiniProgramBundle\Repository\WechatMiniProgramConfigRepository;
 use Tourze\DoctrineIpBundle\Traits\IpTraceableAware;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
@@ -19,38 +19,28 @@ use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 #[ORM\Table(name: 'coupon_wechat_mini_program_config', options: ['comment' => '微信小程序配置'])]
 class WechatMiniProgramConfig implements ApiArrayInterface, Stringable
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
+    use SnowflakeKeyAware;
 
     #[Ignore]
     #[ORM\OneToOne(targetEntity: Coupon::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Coupon $coupon = null;
 
-    #[Groups(['restful_read'])]
+    #[Groups(groups: ['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => 'AppID'])]
     private string $appId = '';
 
-    #[Groups(['restful_read'])]
+    #[Groups(groups: ['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 20, nullable: true, options: ['comment' => '小程序版本'])]
     private ?string $envVersion = null;
 
-    #[Groups(['restful_read'])]
+    #[Groups(groups: ['restful_read'])]
     #[ORM\Column(type: Types::STRING, length: 255, options: ['comment' => '跳转路径'])]
     private ?string $path = '';
 
     use BlameableAware;
     use IpTraceableAware;
     use TimestampableAware;
-
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
 
     public function getCoupon(): ?Coupon
     {
@@ -114,6 +104,6 @@ class WechatMiniProgramConfig implements ApiArrayInterface, Stringable
 
     public function __toString(): string
     {
-        return sprintf('微信小程序配置 [%s]', $this->appId ?: 'ID:' . $this->id);
+        return sprintf('微信小程序配置 [%s]', $this->appId !== '' ? $this->appId : 'ID:' . $this->id);
     }
 }
