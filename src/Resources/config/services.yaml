@@ -6,3 +6,9 @@ services:
 
   Tourze\CouponWechatMiniProgramBundle\Repository\:
     resource: '../../Repository/'
+
+  Tourze\CouponWechatMiniProgramBundle\Controller\:
+    resource: '../../Controller/'
+
+  Tourze\CouponWechatMiniProgramBundle\Service\:
+    resource: '../../Service/'
