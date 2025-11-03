@@ -10,6 +10,7 @@ use Tourze\DoctrineIndexedBundle\DoctrineIndexedBundle;
 use Tourze\DoctrineIpBundle\DoctrineIpBundle;
 use Tourze\DoctrineSnowflakeBundle\DoctrineSnowflakeBundle;
 use Tourze\DoctrineUserBundle\DoctrineUserBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class CouponWechatMiniProgramBundle extends Bundle implements BundleDependencyInterface
 {
@@ -22,6 +23,7 @@ class CouponWechatMiniProgramBundle extends Bundle implements BundleDependencyIn
             DoctrineIpBundle::class => ['all' => true],
             DoctrineSnowflakeBundle::class => ['all' => true],
             CouponCoreBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }
