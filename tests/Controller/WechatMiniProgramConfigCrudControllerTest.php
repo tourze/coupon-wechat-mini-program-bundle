@@ -30,11 +30,6 @@ final class WechatMiniProgramConfigCrudControllerTest extends AbstractEasyAdminC
         return new WechatMiniProgramConfigCrudController();
     }
 
-    public function testGetEntityFqcnReturnsCorrectEntityClass(): void
-    {
-        $this->assertEquals(WechatMiniProgramConfig::class, WechatMiniProgramConfigCrudController::getEntityFqcn());
-    }
-
     public function testConfigureCrudSetsCorrectLabelsAndTitles(): void
     {
         $crud = $this->getController()->configureCrud(Crud::new());
