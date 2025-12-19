@@ -4,7 +4,7 @@ namespace Tourze\CouponWechatMiniProgramBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class CouponWechatMiniProgramExtension extends AutoExtension
+final class CouponWechatMiniProgramExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {
